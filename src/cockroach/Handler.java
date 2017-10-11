@@ -1,5 +1,5 @@
 package cockroach;
-
+									// chứa thông tin của tất cả các opponent trong game bao gồm cả nhân vật và vật thể
 import java.awt.Graphics;
 import java.util.LinkedList;
 

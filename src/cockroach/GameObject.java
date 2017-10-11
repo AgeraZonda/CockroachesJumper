@@ -1,5 +1,5 @@
 package cockroach;
-
+								// class cha của các vật thể trong game
 
 import java.awt.Graphics;
 
