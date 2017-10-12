@@ -20,16 +20,19 @@ public class Floor extends GameObject{
 		// TODO Auto-generated method stub
 		x-=velX;
 		y-=velY;
-		if(x<-100)x=900+90+10+r.nextInt(200)+300;		//khi các cột đi về bên trái thì gán cho nó vị trí ở bên phải-> tạo hiệu ứng vô tận
+		if(x<-100) {
+			x=200+900-60+r.nextInt(170)+400;
+			//khi các cột đi về bên trái thì gán cho nó vị trí ở bên phải-> tạo hiệu ứng vô tận
+		}
 	}
 
 	@Override
 	public void render(Graphics g) {
 		// TODO Auto-generated method stub
 		g.setColor(new Color(76, 74, 72));			//render hình dạng của cột 
-		g.fillRect((int)x, (int)y, 100, 400);
+		g.fillRect((int)x, (int)y, 100, 800);
 		g.setColor(Color.gray);
-		g.fillRect((int)x+2, (int)y+2, 96, 396);
+		g.fillRect((int)x+2, (int)y+2, 96, 796);
 		
 	}
 	public Rectangle getBound() {
