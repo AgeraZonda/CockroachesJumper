@@ -3,5 +3,5 @@ package cockroach;
 
 public enum  ID {
 	Floor,
-	Player
+	Player,Score,GameOver
 }

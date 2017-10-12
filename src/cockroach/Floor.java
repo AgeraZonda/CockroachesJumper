@@ -20,7 +20,7 @@ public class Floor extends GameObject{
 		// TODO Auto-generated method stub
 		x-=velX;
 		y-=velY;
-		if(x<-100)x=900+90+10+r.nextInt(200)+100;		//khi các cột đi về bên trái thì gán cho nó vị trí ở bên phải-> tạo hiệu ứng vô tận
+		if(x<-100)x=900+90+10+r.nextInt(200)+300;		//khi các cột đi về bên trái thì gán cho nó vị trí ở bên phải-> tạo hiệu ứng vô tận
 	}
 
 	@Override

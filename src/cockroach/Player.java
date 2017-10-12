@@ -22,6 +22,7 @@ public class Player extends GameObject{
 		if(velY>=-30 && velY<0)velY+=0.7;				//tạo hiệu ứng trọng lực cho vật thể
 		if(velY>=0 && y!=(int)fl.getY()-100+68)velY+=0.7;
 		y+=velY;
+		x+=velX;
 		
 		
 	}

@@ -47,7 +47,7 @@ public class KeyBoard implements KeyListener {
         keyPressedTime[e.getKeyCode()] = System.currentTimeMillis();		//keypresstime chứa thông tin thời gian lúc thả nút cách
         isPress=0;															//is press để chứa thông tin người chơi đã ấn cách hay chưa
       time=keyPressedTime[e.getKeyCode()]-newTime;							//time chứa thông tin khoảng thời gian giữa ấn và thả cách
-      if(time>=22*40)time=22*40;
+      if(time>=27*40)time=27*40;
 int key = e.getKeyCode();
 		
 		for(int i = 0 ; i<handler.object.size();i++)
@@ -58,7 +58,7 @@ int key = e.getKeyCode();
 				if(tempObject.getVelY()==0)
 				{
 				if(key == KeyEvent.VK_SPACE ) {								//khi key == code của nút space thì gán tốc độ Y cho nhân vật
-					tempObject.setVelY(-(time/40));
+					tempObject.setVelY(-(time/30));
 					IsCount = 1;		
 					}
 				

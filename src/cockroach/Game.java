@@ -23,7 +23,8 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLayeredPane;
-
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
 public class Game extends Canvas implements Runnable {
 //Khai báo biến
 	private static final long serialVersionUID = 1L;
@@ -36,18 +37,22 @@ public class Game extends Canvas implements Runnable {
 	private Floor fl1,fl2,fl3,fl4;
 	private Player p;
 	private KeyBoard keyboard;
-
-
+	private int Score=0;
+	private Score sc;
+	private GameOver go;
 
 
 	public Game()		//Hàm Constructor 
 	{
 		
 		handler = new Handler();
+		sc = new Score(0,0,ID.Score, "");
+		go= new GameOver(0,0,ID.GameOver,"");
+		go.sc(sc);
 		fl1=new Floor(200,HEIGHT-200,ID.Floor,"");
-		fl2=new Floor(200+200-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");		//Khai báo các cột để nhảy
-		fl3=new Floor(200+600-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
-		fl4=new Floor(200+900-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
+		fl2=new Floor(200+300-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");		//Khai báo các cột để nhảy
+		fl3=new Floor(200+700-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
+		fl4=new Floor(200+1000-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
 		p= new Player((int)fl1.getX()+32,(int)fl1.getY()-100+68,ID.Player,"");		//Khai báo nhân vật của mình
 		p.fl(fl1);
 		handler.addObject(p);		//add các cột vào Handler
@@ -55,6 +60,7 @@ public class Game extends Canvas implements Runnable {
 		handler.addObject(fl2);
 		handler.addObject(fl3);
 		handler.addObject(fl4);
+		handler.addObject(sc);
 		keyboard = new KeyBoard(handler);		
 		this.addKeyListener(keyboard);			//add sự kiện bàn phím
 		
@@ -81,7 +87,8 @@ public class Game extends Canvas implements Runnable {
 	public static void main(String args[])		//Hàm Main
 	{
 		
-		new Window(WIDTH, HEIGHT,"Mirror",gm);
+		Window w= new Window(WIDTH, HEIGHT,"Mirror",gm);
+		
 		
 	}
 	
@@ -113,7 +120,7 @@ public class Game extends Canvas implements Runnable {
 			if(System.currentTimeMillis()- timer > 1000)
 			{
 				timer +=1000;
-//				System.out.println("FPS: "+ frames + "TICKS: "+ updates);
+				System.out.println("FPS: "+ frames + "TICKS: "+ updates);
 				frames = 0;
 				updates =0;
 				
@@ -141,7 +148,7 @@ public class Game extends Canvas implements Runnable {
 				fl4.setVelX(0);
 			}
 			Rectangle a = p.getBound();
-		if(a.intersects(fl1.getBound())==true || a.intersects(fl2.getBound())==true || a.intersects(fl3.getBound())==true || a.intersects(fl4.getBound())==true)		// hàm dừng nhân vật khi va chạm vào cột
+		if((a.intersects(fl1.getBound())==true || a.intersects(fl2.getBound())==true || a.intersects(fl3.getBound())==true || a.intersects(fl4.getBound())==true) && p.getVelX()==0)		// hàm dừng nhân vật khi va chạm vào cột
 				{
 				p.setVelY(0);
 				p.setY((int)fl1.getY()-100+68);
@@ -149,24 +156,69 @@ public class Game extends Canvas implements Runnable {
 				fl2.setVelX(0);
 				fl3.setVelX(0);
 				fl4.setVelX(0);
+				
+				sc.setScore(sc.getScore()+1);			//tăng 1 điểm mỗi khi nhảy đến cột
 				}
-			if(p.getY()>=(int)fl1.getY()-100+190)
+			if(p.getY()>=(int)fl1.getY()-100+80)
 			{
-				p.setVelY(0);
+//				p.setY((int)fl1.getY()-100+80);
+				p.setVelX(3);
 				fl1.setVelX(0);
 				fl2.setVelX(0);
 				fl3.setVelX(0);
 				fl4.setVelX(0);
-				p.setVelY(0);
-				p.setY((int)fl1.getY()-100+190);
+				handler.addObject(go);
+				handler.removeObject(fl1);
+				handler.removeObject(fl2);				//khi nhân vật chết xóa hết các vật thể và để lại mỗi dòng game over
+				handler.removeObject(fl3);
+				handler.removeObject(fl4);
+				handler.removeObject(sc);
+				
+				
 			}
+			 addMouseListener(new MouseAdapter() 		//thêm sự kiện cho chuột
+			 { 
+				 public void mousePressed(MouseEvent e)
+					{
+					 int mx= e.getX();
+						int my= e.getY();
+						if(mouseOver(mx,my,400, 400, 100, 50))		//chuột click ở trong vùng nút retry
+						{
+							handler = new Handler();
+							sc = new Score(0,0,ID.Score, "");
+							go= new GameOver(0,0,ID.GameOver,"");
+							go.sc(sc);
+							fl1=new Floor(200,HEIGHT-200,ID.Floor,"");
+							fl2=new Floor(200+300-100+r.nextInt(300),HEIGHT-200,ID.Floor,"");		//Khai báo các cột để nhảy
+							fl3=new Floor(200+700-100+r.nextInt(300),HEIGHT-200,ID.Floor,"");
+							fl4=new Floor(200+1000-100+r.nextInt(300),HEIGHT-200,ID.Floor,"");
+							p= new Player((int)fl1.getX()+32,(int)fl1.getY()-100+68,ID.Player,"");		//Khai báo nhân vật của mình
+							p.fl(fl1);
+							handler.addObject(p);		//add các cột vào Handler
+							handler.addObject(fl1);
+							handler.addObject(fl2);
+							handler.addObject(fl3);
+							handler.addObject(fl4);
+							handler.addObject(sc);
+							handler.removeObject(go);
+							keyboard = new KeyBoard(handler);
+							gm.addKeyListener(keyboard);
+								
+						}
+					}
+				 public void mouseReleased(MouseEvent e)
+				 {
+					 
+				 }
+			 });
+			 }
 			
 		
 				
 			
 			
 		
-	}
+	
 
 	public void menurender(Graphics g)		//Hàm render menu game (chưa dùng )
 	{
@@ -217,7 +269,8 @@ public class Game extends Canvas implements Runnable {
 			this.createBufferStrategy(3);
 			return;
 		}
-		Graphics g = bs.getDrawGraphics();		
+		Graphics g = bs.getDrawGraphics();	
+		
 			g.setColor(new Color(39, 40, 34));
 			g.fillRect(0,0,WIDTH,HEIGHT);
 			g.setColor(Color.gray);
@@ -227,8 +280,16 @@ public class Game extends Canvas implements Runnable {
 			
 			
 			
-			
 		g.dispose();
+		
+		
 		bs.show();
 	}
+
+
+	public int getScore() {
+		// TODO Auto-generated method stub
+		return Score;
+	}
+
 }

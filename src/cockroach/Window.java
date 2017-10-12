@@ -4,8 +4,14 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.layout.StackPane;
 
 public class Window extends Canvas{
+	JFrame frame = new JFrame("MyGame");
 
 	/**
 	 * 
@@ -14,7 +20,8 @@ public class Window extends Canvas{
 	
 	public Window(int width,int height, String title, Game game)
 	{
-		JFrame frame = new JFrame(title);
+		
+		
 		frame.setPreferredSize(new Dimension(width,height));
 		frame.setMaximumSize(new Dimension(width,height));
 		frame.setMinimumSize(new Dimension(width,height));
@@ -25,5 +32,7 @@ public class Window extends Canvas{
 		frame.setVisible(true);
 		game.start();
 		
+		
 	}
+
 }
