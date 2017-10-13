@@ -40,11 +40,8 @@ public class Game extends Canvas implements Runnable {
 	private int Score=0;
 	private Score sc;
 	private GameOver go;
-	private int thisFl=1;
-	private Floor currentFloor;
-	private Floor nextFloor;
-	
-
+	private Floor currentFloor,nextFloor;
+	private int thisFl;
 
 	public Game()		//Hàm Constructor 
 	{
@@ -54,13 +51,10 @@ public class Game extends Canvas implements Runnable {
 		go= new GameOver(0,0,ID.GameOver,"");
 		go.sc(sc);
 		fl1=new Floor(200,HEIGHT-200,ID.Floor,"");
-		fl2=new Floor(200+300-100+r.nextInt(150),HEIGHT-200+100,ID.Floor,"");		//Khai báo các cột để nhảy
-		fl3=new Floor(200+600-100+r.nextInt(150),HEIGHT-200+100,ID.Floor,"");
-		fl4=new Floor(200+900-100+r.nextInt(150),HEIGHT-200+100,ID.Floor,"");
-		 currentFloor=fl1;
-		 nextFloor=fl2;
+		fl2=new Floor(200+300-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");		//Khai báo các cột để nhảy
+		fl3=new Floor(200+700-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
+		fl4=new Floor(200+1000-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
 		p= new Player((int)fl1.getX()+32,(int)fl1.getY()-100+68,ID.Player,"");		//Khai báo nhân vật của mình
-		thisFl=1;
 		p.fl(fl1);
 		handler.addObject(p);		//add các cột vào Handler
 		handler.addObject(fl1);
@@ -68,6 +62,8 @@ public class Game extends Canvas implements Runnable {
 		handler.addObject(fl3);
 		handler.addObject(fl4);
 		handler.addObject(sc);
+		currentFloor = fl1;
+		nextFloor = fl2;
 		keyboard = new KeyBoard(handler);		
 		this.addKeyListener(keyboard);			//add sự kiện bàn phím
 		
@@ -138,30 +134,60 @@ public class Game extends Canvas implements Runnable {
 	
 	private void tick()		//Hàm xử Lý sau mỗi Khung Hình
 	{
-		
-		if(thisFl%4==1)
-		{
-			currentFloor=fl1;
-			nextFloor=fl2;
-		}
-		if(thisFl%4==2)
-		{
-			currentFloor=fl2;
-			nextFloor=fl3;
-		}
-		if(thisFl%4==3)
-		{
-			currentFloor=fl3;
-			nextFloor=fl2;
-		}
-		if(thisFl%4==0)
-				{
-			currentFloor=fl1;
-			nextFloor=fl2;
-		}
-		
+		Rectangle a = p.getBound();
+	
 		
 			handler.tick();		//xử lý các vật thể trên mỗi khung hình (bao gồm nhân vật và các cột )
+			if(thisFl%4==1)
+			{
+				currentFloor=fl1;
+				nextFloor=fl2;
+			}
+			if(thisFl%4==2)
+			{
+				currentFloor=fl2;
+				nextFloor=fl3;
+			}
+			if(thisFl%4==3)
+			{
+				currentFloor=fl3;
+				nextFloor=fl4;
+			}
+			if(thisFl%4==0)
+					{
+				currentFloor=fl1;
+				nextFloor=fl1;
+			}
+		
+			Line2D l2 = new Line2D.Float((int)(nextFloor.getX()+2),(int)(nextFloor.getY()+10), (int)(nextFloor.getX()+2),(int)(nextFloor.getY()+10+300));
+			Line2D l1 = new Line2D.Float(0,HEIGHT, WIDTH, HEIGHT);
+			Line2D l3 = new Line2D.Float((int)(nextFloor.getX()),(int)(nextFloor.getY()),(int)(nextFloor.getX()+100),(int)(nextFloor.getY()));
+			if(l3.intersects(a))		// hàm dừng nhân vật khi va chạm vào cột
+			{
+			p.setVelY(0);
+			p.setY((int)nextFloor.getY()-100+68);
+			fl1.setVelX(0);
+			fl2.setVelX(0);
+			fl3.setVelX(0);
+			fl4.setVelX(0);
+			thisFl++;
+			sc.setScore(sc.getScore()+1);			//tăng 1 điểm mỗi khi nhảy đến cột
+			}
+			if(l1.intersects(a) || l2.intersects(a))
+			{
+				
+				fl1.setVelX(0);
+				fl2.setVelX(0);
+				fl3.setVelX(0);
+				fl4.setVelX(0);
+				handler.addObject(go);
+				handler.removeObject(p);
+				handler.removeObject(fl1);
+				handler.removeObject(fl2);				//khi nhân vật chết xóa hết các vật thể và để lại mỗi dòng game over
+				handler.removeObject(fl3);
+				handler.removeObject(fl4);
+				handler.removeObject(sc);
+			}
 			if(p.getVelY()!=0)
 			{
 				fl1.setVelX(7.6925);	//làm các cột di chuyển khi nhân vật nhảy 
@@ -174,42 +200,26 @@ public class Game extends Canvas implements Runnable {
 				fl3.setVelX(0);
 				fl4.setVelX(0);
 			}
-			Rectangle a = p.getBound();
-		if((a.intersects(nextFloor.getBound()))==true && p.getVelX()==0)		// hàm dừng nhân vật khi va chạm vào cột
-				{
-				p.setVelY(0);
-				p.setY((int)nextFloor.getY()-100+68);
-				fl1.setVelX(0);
-				fl2.setVelX(0);
-				fl3.setVelX(0);
-				fl4.setVelX(0);
-				thisFl++;
-				
-				sc.setScore(sc.getScore()+1);			//tăng 1 điểm mỗi khi nhảy đến cột
-				}
-		
-//		if(thisFl%4==1 && p.getY()>=(int)currentFloor.getY()-100+80)	
-//		{
-//			
-//			
-//		
-//			p.setVelX(3);
-//			fl1.setVelX(0);
-//			fl2.setVelX(0);
-//			fl3.setVelX(0);
-//			fl4.setVelX(0);
-//			handler.addObject(go);
-//			handler.removeObject(fl1);
-//			handler.removeObject(fl2);				//khi nhân vật chết xóa hết các vật thể và để lại mỗi dòng game over
-//			handler.removeObject(fl3);
-//			handler.removeObject(fl4);
-//			handler.removeObject(sc);
-//			
-//			
-//		}
-//		
-//		
 			
+		
+	
+//			if(p.getY()>=(int)nextFloor.getY()-100+80 && (a.intersects(fl1.getBound())==true || a.intersects(fl2.getBound())==true || a.intersects(fl3.getBound())==true || a.intersects(fl4.getBound())==true) )
+//			{
+////				p.setY((int)fl1.getY()-100+80);
+//				p.setVelX(3);
+//				fl1.setVelX(0);
+//				fl2.setVelX(0);
+//				fl3.setVelX(0);
+//				fl4.setVelX(0);
+//				handler.addObject(go);
+//				handler.removeObject(fl1);
+//				handler.removeObject(fl2);				//khi nhân vật chết xóa hết các vật thể và để lại mỗi dòng game over
+//				handler.removeObject(fl3);
+//				handler.removeObject(fl4);
+//				handler.removeObject(sc);
+//				
+//				
+//			}
 			 addMouseListener(new MouseAdapter() 		//thêm sự kiện cho chuột
 			 { 
 				 public void mousePressed(MouseEvent e)
@@ -223,12 +233,10 @@ public class Game extends Canvas implements Runnable {
 							go= new GameOver(0,0,ID.GameOver,"");
 							go.sc(sc);
 							fl1=new Floor(200,HEIGHT-200,ID.Floor,"");
-							fl2=new Floor(200+300-100+r.nextInt(150),HEIGHT-200+100-r.nextInt(200),ID.Floor,"");		//Khai báo các cột để nhảy
-							fl3=new Floor(200+600-100+r.nextInt(150),HEIGHT-200+100-r.nextInt(200),ID.Floor,"");
-							fl4=new Floor(200+900-100+r.nextInt(150),HEIGHT-200+100-r.nextInt(200),ID.Floor,"");
-							
+							fl2=new Floor(200+300-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");		//Khai báo các cột để nhảy
+							fl3=new Floor(200+700-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
+							fl4=new Floor(200+1000-100+r.nextInt(200),HEIGHT-200,ID.Floor,"");
 							p= new Player((int)fl1.getX()+32,(int)fl1.getY()-100+68,ID.Player,"");		//Khai báo nhân vật của mình
-							thisFl=1;
 							p.fl(fl1);
 							handler.addObject(p);		//add các cột vào Handler
 							handler.addObject(fl1);
@@ -236,8 +244,12 @@ public class Game extends Canvas implements Runnable {
 							handler.addObject(fl3);
 							handler.addObject(fl4);
 							handler.addObject(sc);
+							currentFloor = fl1;
+							nextFloor = fl2;
 							keyboard = new KeyBoard(handler);		
 							gm.addKeyListener(keyboard);			//add sự kiện bàn phím
+							
+								
 						}
 					}
 				 public void mouseReleased(MouseEvent e)
@@ -310,7 +322,7 @@ public class Game extends Canvas implements Runnable {
 			g.setColor(Color.gray);
 			
 			handler.render(g);	
-		
+		 
 			
 			
 			
