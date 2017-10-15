@@ -6,8 +6,8 @@ import java.awt.Graphics;
 				//class cho chữ score đếm điểm
 public class Score extends GameObject{
 private int Score=0;
-	public Score(double x, double y, ID id, String a) {
-		super(x, y, id, a);
+	public Score(int x, int y) {
+		super(x, y);
 		// TODO Auto-generated constructor stub
 	
 	}

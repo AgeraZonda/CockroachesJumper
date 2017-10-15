@@ -6,17 +6,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyBoard implements KeyListener {
-
-    private boolean[] keys;
+private boolean isSpace=false;
     private int isPress = 0;
-    private Handler handler;
-	private int IsCount=0;
 	private double time=0;
-	
-	public KeyBoard(Handler handler)
+	Player p ;
+	public KeyBoard()
 	{
-		this.handler=handler;
-		keys = new boolean[KeyEvent.KEY_LAST];
         keyPressedTime = new double[KeyEvent.KEY_LAST];
 	}
     private double[] keyPressedTime;
@@ -29,8 +24,6 @@ public class KeyBoard implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        keys[e.getKeyCode()] = true;
-
        if(isPress==0)
     	   {
     	   newTime = System.currentTimeMillis();
@@ -43,46 +36,31 @@ public class KeyBoard implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {    
-        keys[e.getKeyCode()] = false;   
         keyPressedTime[e.getKeyCode()] = System.currentTimeMillis();		//keypresstime chứa thông tin thời gian lúc thả nút cách
         isPress=0;															//is press để chứa thông tin người chơi đã ấn cách hay chưa
       time=keyPressedTime[e.getKeyCode()]-newTime;							//time chứa thông tin khoảng thời gian giữa ấn và thả cách
       if(time>=25*40)time=25*40;
 int key = e.getKeyCode();
 		
-		for(int i = 0 ; i<handler.object.size();i++)
-		{
-			GameObject tempObject = handler.object.get(i);					//khi id = với id của nhân vật 
-			if(tempObject.getId()==ID.Player)
-			{
-				if(tempObject.getVelY()==0)
-				{
+		
 				if(key == KeyEvent.VK_SPACE ) {								//khi key == code của nút space thì gán tốc độ Y cho nhân vật
-					tempObject.setVelY(-(time/30));
-					IsCount = 1;		
+					p.setVelY(-(time/30));		
+					isSpace=true;
 					}
-				
-				
-				}
-			}
-		}
+			
+		
     }
-
-    public double keyPressedTime(int k) {
-        return keyPressedTime[k];
+    public void setPlayer(Player p)
+    {
+    	this.p=p;
     }
-
-    public boolean isKeyPressed(int k) {
-        return keys[k];
+    public void setIsSpace(boolean isSpace)
+    {
+    	this.isSpace= isSpace;
     }
-    
-
-    public boolean isKeyCombo(int[] k) {
-        boolean ret = true;
-        for(int i = 0;i < k.length; i++) {
-            ret &= keys[k[i]];
-        }
-        return ret;
+    public boolean getIsSpace()
+    {
+    	return isSpace;
     }
 
 }

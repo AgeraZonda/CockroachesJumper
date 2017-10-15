@@ -6,8 +6,8 @@ import java.awt.Graphics;
 			//class của thông báo gameover
 public  class GameOver extends GameObject{
 private Score sc ;
-	public GameOver(double x, double y, ID id, String a) {
-		super(x, y, id, a);
+	public GameOver(int x, int y) {
+		super(x, y);
 		// TODO Auto-generated constructor stub
 		
 	}

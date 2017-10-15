@@ -4,48 +4,32 @@ package cockroach;
 import java.awt.Graphics;
 
 public abstract class GameObject {
-	protected double x,y;
-	protected ID id;
+	protected int x,y;
 	protected double velX,velY;
-	protected double radian;
+
 	String a;
 
-	public GameObject(double x, double y,ID id, String a)
+	public GameObject(int x, int y)
 	{
 		this.x=x;
 		this.y=y;
-		this.id=id;
-		this.a=a;
 		
 	}
 	public abstract void tick();
 	public abstract void render(Graphics g);
-	public void setX(double x) {
+	public void setX(int x) {
 		this.x=x;
 	}
-	public double getRadian()
-	{
-		return radian;
-	}
-	
-	public double getX()
+	public int getX()
 	{
 		return x;
 	}
-	public void setY(double y) {
+	public void setY(int y) {
 		this.y=y;
 	}
-	public double getY()
+	public int getY()
 	{
 		return y;
-	}
-	public void setId(ID id)
-	{
-		this.id=id;
-	}
-	public ID getId()
-	{
-		return id;
 	}
 	public void setVelX(double velX)
 	{

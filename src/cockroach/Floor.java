@@ -8,8 +8,8 @@ import java.util.Random;
 public class Floor extends GameObject{
 	public static final int WIDTH = 1080 ,HEIGHT = WIDTH/12*9;
 	private Random r = new Random();
-	public Floor(double x, double y, ID id, String a) {
-		super(x, y, id, a);
+	public Floor(int x, int y) {
+		super(x, y);
 		// TODO Auto-generated constructor stub
 		velX=0;
 		velY=0;
@@ -19,10 +19,10 @@ public class Floor extends GameObject{
 	public void tick() {
 		// TODO Auto-generated method stub
 		x-=velX;
-		y-=velY;
-		if(x<-100) {
-			x=200+900-60+r.nextInt(170)+400;
-			//khi các cột đi về bên trái thì gán cho nó vị trí ở bên phải-> tạo hiệu ứng vô tận
+		if(x<-100)
+		{
+		x=200+1600-85+r.nextInt(170);
+		y=HEIGHT-200-85+r.nextInt(170);
 		}
 	}
 

@@ -5,12 +5,13 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public class Player extends GameObject{
+	
 	public static final int WIDTH = 1080 ,HEIGHT = WIDTH/12*9;
-	Floor fl;
+	
 	
 
-	public Player(double x, double y, ID id, String a) {
-		super(x, y, id, a);
+	public Player(int x, int y) {
+		super(x, y);
 		// TODO Auto-generated constructor stub
 		velX=0;
 		velY=0;
@@ -19,18 +20,14 @@ public class Player extends GameObject{
 	@Override
 	public void tick() {
 		// TODO Auto-generated method stub
-		if(velY>=-50 && velY<0)velY+=0.7;				//tạo hiệu ứng trọng lực cho vật thể
-		if(velY>=0 && y!=(int)fl.getY()-100+68)velY+=0.7;
+			//tạo hiệu ứng trọng lực cho vật thể
+	
 		y+=velY;
 		x+=velX;
 		
 		
 	}
-	public void fl(Floor fl)			//gán floor
-	{
-		this.fl=fl;
-		
-	}
+
 
 	@Override
 	public void render(Graphics g) {
