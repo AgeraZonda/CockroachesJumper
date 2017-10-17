@@ -1,6 +1,5 @@
 package cockroach;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Line2D;
 
@@ -22,9 +21,7 @@ private Floor fl;
 	@Override
 	public void render(Graphics g) {
 		// TODO Auto-generated method stub
-		g.setColor(Color.red);
-	
-		
+
 	}
 	public void setFLoor(Floor fl)
 	{
@@ -32,7 +29,7 @@ private Floor fl;
 	}
 	public Line2D getLine()
 	{
-		return new Line2D.Float(x,y+5,x,y+300);
+		return new Line2D.Float(x,y+8,x,y+300);
 	}
 	
 }

@@ -7,7 +7,6 @@ public abstract class GameObject {
 	protected int x,y;
 	protected double velX,velY;
 
-	String a;
 
 	public GameObject(int x, int y)
 	{

@@ -29,9 +29,11 @@ private Score sc ;
 		g.drawString("Game Over!!! Your Score :  "+Integer.toString(sc.getScore()), 200, 200);
 		g.setColor(Color.gray);
 		g.fillRect(400, 400, 100, 50);
+		g.fillRect(600, 400, 100, 50);
 		g.setColor(new Color(39, 40, 34));
 		g.setFont(new Font("Dialog", Font.PLAIN, 18)); 
 		g.drawString("Retry",430,430);
+		g.drawString("Quit",630,430);
 		
 		
 	}

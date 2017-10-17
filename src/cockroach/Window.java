@@ -4,11 +4,8 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.layout.StackPane;
+
 
 public class Window extends Canvas{
 	JFrame frame = new JFrame("MyGame");
@@ -34,5 +31,6 @@ public class Window extends Canvas{
 		
 		
 	}
+
 
 }

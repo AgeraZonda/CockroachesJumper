@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 
 public class Player extends GameObject{
 	
-	public static final int WIDTH = 1080 ,HEIGHT = WIDTH/12*9;
 	
 	
 
@@ -22,8 +21,7 @@ public class Player extends GameObject{
 		// TODO Auto-generated method stub
 			//tạo hiệu ứng trọng lực cho vật thể
 	
-		y+=velY;
-		x+=velX;
+	
 		
 		
 	}
