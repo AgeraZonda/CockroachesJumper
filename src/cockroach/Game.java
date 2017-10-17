@@ -75,6 +75,56 @@ public class Game extends Canvas implements Runnable {
 		nextFloor = fl2;
 		keyboard.setPlayer(p);
 		// add sự kiện bàn phím
+		addMouseListener(new MouseAdapter() // thêm sự kiện cho chuột
+				{
+					public void mousePressed(MouseEvent e) {
+						int mx = e.getX();
+						int my = e.getY();
+						if (mouseOver(mx, my, 400, 400, 100, 50)) // chuột click ở trong vùng nút retry
+						{
+							keyboard = new KeyBoard();
+							bar = new Bar(10, 10);
+							bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
+							handler = new Handler();
+							sc = new Score(0, 0);
+							go = new GameOver(0, 0);
+							go.sc(sc);
+							fl1 = new Floor(200, HEIGHT - 200);
+							fl2 = new Floor(200 + 400 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170)); // Khai báo các cột để nhảy
+							fl3 = new Floor(200 + 800 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
+							fl4 = new Floor(200 + 1200 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
+							p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32); // Khai báo nhân vật của mình
+							thisFl = 1;
+							ln1 = new Line(fl1.getX(), fl1.getY());
+							ln2 = new Line(fl2.getX(), fl2.getY());
+							ln3 = new Line(fl3.getX(), fl3.getY());
+							ln4 = new Line(fl4.getX(), fl4.getY());
+							ln1.setFLoor(fl1);
+							ln2.setFLoor(fl2);
+							ln3.setFLoor(fl3);
+							ln4.setFLoor(fl4);
+							handler.addObject(p); // add các cột vào Handler
+							handler.addObject(fl1);
+							handler.addObject(fl2);
+							handler.addObject(fl3);
+							handler.addObject(fl4);
+							handler.addObject(sc);
+							handler.addObject(ln1);
+							handler.addObject(ln2);
+							handler.addObject(ln3);
+							handler.addObject(ln4);
+							bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
+							handler.addObject(bar);
+							currentFloor = fl1;
+							nextFloor = fl2;
+							keyboard.setPlayer(p);
+							gm.addKeyListener(keyboard); // add sự kiện bàn phím
+							stage = 2;
+
+						}
+					
+					}
+				});
 
 	}
 
@@ -263,48 +313,6 @@ public class Game extends Canvas implements Runnable {
 				public void mousePressed(MouseEvent e) {
 					int mx = e.getX();
 					int my = e.getY();
-					if (mouseOver(mx, my, 400, 400, 100, 50)) // chuột click ở trong vùng nút retry
-					{
-						keyboard = new KeyBoard();
-						bar = new Bar(10, 10);
-						bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
-						handler = new Handler();
-						sc = new Score(0, 0);
-						go = new GameOver(0, 0);
-						go.sc(sc);
-						fl1 = new Floor(200, HEIGHT - 200);
-						fl2 = new Floor(200 + 400 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170)); // Khai báo các cột để nhảy
-						fl3 = new Floor(200 + 800 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
-						fl4 = new Floor(200 + 1200 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
-						p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32); // Khai báo nhân vật của mình
-						thisFl = 1;
-						ln1 = new Line(fl1.getX(), fl1.getY());
-						ln2 = new Line(fl2.getX(), fl2.getY());
-						ln3 = new Line(fl3.getX(), fl3.getY());
-						ln4 = new Line(fl4.getX(), fl4.getY());
-						ln1.setFLoor(fl1);
-						ln2.setFLoor(fl2);
-						ln3.setFLoor(fl3);
-						ln4.setFLoor(fl4);
-						handler.addObject(p); // add các cột vào Handler
-						handler.addObject(fl1);
-						handler.addObject(fl2);
-						handler.addObject(fl3);
-						handler.addObject(fl4);
-						handler.addObject(sc);
-						handler.addObject(ln1);
-						handler.addObject(ln2);
-						handler.addObject(ln3);
-						handler.addObject(ln4);
-						bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
-						handler.addObject(bar);
-						currentFloor = fl1;
-						nextFloor = fl2;
-						keyboard.setPlayer(p);
-						gm.addKeyListener(keyboard); // add sự kiện bàn phím
-						stage = 2;
-
-					}
 					if(mouseOver(mx,my,600, 400, 100, 50))
 					{
 						System.exit(0);
