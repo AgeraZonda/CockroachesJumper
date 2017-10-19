@@ -1,7 +1,6 @@
 package cockroach;
 
 //class của các cột ở dưới 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
@@ -9,7 +8,7 @@ import java.util.Random;
 public class Floor extends GameObject {
 	public static final int WIDTH = 1080, HEIGHT = WIDTH / 12 * 9;
 	private Random r = new Random();
-
+	Texture tex = Game.getInstance();
 	public Floor(int x, int y) {
 		super(x, y);
 		// TODO Auto-generated constructor stub
@@ -30,10 +29,7 @@ public class Floor extends GameObject {
 	@Override
 	public void render(Graphics g) {
 		// TODO Auto-generated method stub
-		g.setColor(new Color(76, 74, 72)); // render hình dạng của cột
-		g.fillRect((int) x, (int) y, 100, 800);
-		g.setColor(Color.gray);
-		g.fillRect((int) x + 2, (int) y + 2, 96, 796);
+		g.drawImage(tex.floor[0],(int)x,(int)y-10,null);
 
 	}
 

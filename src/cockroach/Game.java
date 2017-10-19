@@ -10,10 +10,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class Game extends Canvas implements Runnable {
-	// Khai báo biến
+public class Game extends Canvas implements Runnable {						// Khai báo biến
 	private static final long serialVersionUID = 1L;
 	public static final int WIDTH = 1080, HEIGHT = WIDTH / 12 * 9;
 	private int thisFl;
@@ -33,12 +33,21 @@ public class Game extends Canvas implements Runnable {
 	private Rectangle a;
 	private Bar bar;
 	private Line ln1, ln2, ln3, ln4;
-	private int stage;
+	private int stage;								//biến phân biệt các cảnh trong game
+	private static Texture tex;
+	private LandScape ls;
+	private BufferedImageLoader bil;
+	BufferedImage im;
+	
 
 	public Game() // Hàm Constructor
 	{
+		bil=new BufferedImageLoader() ;
+		im=bil.loadImage("/Start.png");
+		tex= new Texture();
 		stage = 1;
 		keyboard = new KeyBoard();
+		
 		bar = new Bar(10, 10);
 		bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
 		handler = new Handler();
@@ -49,7 +58,8 @@ public class Game extends Canvas implements Runnable {
 		fl2 = new Floor(200 + 400 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170)); // Khai báo các cột để nhảy																		
 		fl3 = new Floor(200 + 800 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
 		fl4 = new Floor(200 + 1200 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
-		p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32); // Khai báo nhân vật của mình
+		p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32,0); // Khai báo nhân vật của mình
+		ls= new LandScape(0,0);
 		thisFl = 1;
 		ln1 = new Line(fl1.getX(), fl1.getY());
 		ln2 = new Line(fl2.getX(), fl2.getY());
@@ -59,8 +69,8 @@ public class Game extends Canvas implements Runnable {
 		ln2.setFLoor(fl2);
 		ln3.setFLoor(fl3);
 		ln4.setFLoor(fl4);
-		handler.addObject(p); // add các cột vào Handler
-		handler.addObject(fl1);
+		handler.addObject(ls);
+		handler.addObject(fl1); // add các cột vào Handler
 		handler.addObject(fl2);
 		handler.addObject(fl3);
 		handler.addObject(fl4);
@@ -69,19 +79,23 @@ public class Game extends Canvas implements Runnable {
 		handler.addObject(ln2);
 		handler.addObject(ln3);
 		handler.addObject(ln4);
+		handler.addObject(p);
 		bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
 		handler.addObject(bar);
 		currentFloor = fl1;
 		nextFloor = fl2;
 		keyboard.setPlayer(p);
-		// add sự kiện bàn phím
-		addMouseListener(new MouseAdapter() // thêm sự kiện cho chuột
+		addMouseListener(new MouseAdapter() 			// thêm sự kiện cho chuột
 				{
 					public void mousePressed(MouseEvent e) {
 						int mx = e.getX();
 						int my = e.getY();
-						if (mouseOver(mx, my, 400, 400, 100, 50)) // chuột click ở trong vùng nút retry
+						if (mouseOver(mx, my, 350, 400, 100, 50) && stage==3) 			// chuột click ở trong vùng nút retry
 						{
+							bil=new BufferedImageLoader() ;
+							im=bil.loadImage("/Start.png");
+							tex= new Texture();
+							stage = 1;
 							keyboard = new KeyBoard();
 							bar = new Bar(10, 10);
 							bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
@@ -90,10 +104,11 @@ public class Game extends Canvas implements Runnable {
 							go = new GameOver(0, 0);
 							go.sc(sc);
 							fl1 = new Floor(200, HEIGHT - 200);
-							fl2 = new Floor(200 + 400 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170)); // Khai báo các cột để nhảy
+							fl2 = new Floor(200 + 400 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170)); 																
 							fl3 = new Floor(200 + 800 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
 							fl4 = new Floor(200 + 1200 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
-							p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32); // Khai báo nhân vật của mình
+							p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32,0); 
+							ls= new LandScape(0,0);
 							thisFl = 1;
 							ln1 = new Line(fl1.getX(), fl1.getY());
 							ln2 = new Line(fl2.getX(), fl2.getY());
@@ -103,7 +118,7 @@ public class Game extends Canvas implements Runnable {
 							ln2.setFLoor(fl2);
 							ln3.setFLoor(fl3);
 							ln4.setFLoor(fl4);
-							handler.addObject(p); // add các cột vào Handler
+							handler.addObject(ls);
 							handler.addObject(fl1);
 							handler.addObject(fl2);
 							handler.addObject(fl3);
@@ -113,13 +128,13 @@ public class Game extends Canvas implements Runnable {
 							handler.addObject(ln2);
 							handler.addObject(ln3);
 							handler.addObject(ln4);
+							handler.addObject(p);
 							bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
 							handler.addObject(bar);
 							currentFloor = fl1;
 							nextFloor = fl2;
 							keyboard.setPlayer(p);
-							gm.addKeyListener(keyboard); // add sự kiện bàn phím
-							stage = 2;
+							stage=2;
 
 						}
 					
@@ -128,7 +143,7 @@ public class Game extends Canvas implements Runnable {
 
 	}
 
-	public synchronized void stop() // Hàm dừng MutiThreading
+	public synchronized void stop() 		// Hàm dừng MutiThreading
 	{
 		try {
 			thread.join();
@@ -139,14 +154,14 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 
-	public synchronized void start() // Hàm bắt đầu MultiThreading
+	public synchronized void start() 		// Hàm bắt đầu MultiThreading
 	{
 		thread = new Thread(this);
 		thread.start();
 		running = true;
 	}
 
-	public static void main(String args[]) // Hàm Main
+	public static void main(String args[])	 // Hàm Main
 	{
 		new Window(WIDTH, HEIGHT, "Mirror", gm);
 	}
@@ -154,35 +169,42 @@ public class Game extends Canvas implements Runnable {
 	@Override
 	public void run() // Hàm Run MultiThreading
 	{
+
 		this.requestFocus();
+		
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
-		while (running) {
+		long timer = System.currentTimeMillis();
+	
+		while(running) {
 			long now = System.nanoTime();
-			delta += (now - lastTime) / ns;
+			delta += (now - lastTime) / ns ;
 			lastTime = now;
-			while (delta >= 1) {
+			while(delta>=1) {
 				tick();
+				
 				delta--;
+				
 			}
 			render();
 		}
-
 	}
 
 	private void tick() // Hàm xử Lý sau mỗi Khung Hình
 	{
-		
+	if(keyboard.getIspress()==0)		//khi quả bóng bay thì trở về lúc ban đầu 
+	{
+		p.setType(0);
+	}
 		if (stage == 2) {
 			this.addKeyListener(keyboard);
 			if (keyboard.getIsSpace())
-				p.setVelY(p.getVelY() + 0.7);
-
-			a = p.getBound();
+				p.setVelY(p.getVelY() + 0.7);		//tạo hiệu ứng trọng lực 
+			a = p.getBound();						//tạo vùng cho quả bóng
 			if (p.getVelY() != 0 && keyboard.getIsSpace() == true) {
-				fl1.setVelX(7.6925); // làm các cột di chuyển khi nhân vật nhảy
+				fl1.setVelX(7.6925); 				// làm các cột di chuyển khi nhân vật nhảy
 				fl2.setVelX(7.6925);
 				fl3.setVelX(7.6925);
 				fl4.setVelX(7.6925);
@@ -192,13 +214,13 @@ public class Game extends Canvas implements Runnable {
 				fl3.setVelX(0);
 				fl4.setVelX(0);
 			}
-			handler.tick(); // xử lý các vật thể trên mỗi khung hình (bao gồm nhân vật và các cột )
+			handler.tick(); 			// xử lý các vật thể trên mỗi khung hình (bao gồm nhân vật và các cột )
 			if (bottom.intersects(a) || ln1.getLine().intersects(a) || ln2.getLine().intersects(a)
 					|| ln3.getLine().intersects(a) || ln4.getLine().intersects(a) || bar.getHeath() <= 1) {
 				handler.addObject(go);
 				handler.removeObject(p);
 				handler.removeObject(fl1);
-				handler.removeObject(fl2); // khi nhân vật chết xóa hết các vật thể và để lại mỗi dòng game over
+				handler.removeObject(fl2); 		// khi nhân vật chết xóa hết các vật thể và để lại mỗi dòng game over
 				handler.removeObject(fl3);
 				handler.removeObject(fl4);
 				handler.removeObject(sc);
@@ -206,7 +228,7 @@ public class Game extends Canvas implements Runnable {
 				stage = 3;
 			}
 			if (p.getX() > nextFloor.getX() - 32 && keyboard.getIsSpace()) {
-				sc.setScore(sc.getScore() + 1);// tăng 1 điểm mỗi khi nhảy đến cột
+				sc.setScore(sc.getScore() + 1);				// tăng 1 điểm mỗi khi nhảy đến cột
 				thisFl++;
 				if (thisFl % 4 == 1) {
 					currentFloor = fl1;
@@ -226,10 +248,10 @@ public class Game extends Canvas implements Runnable {
 				}
 			}
 
-			if ((p.getX() >= fl1.getX() && p.getX() <= fl1.getX() + 100 && p.getY() >= fl1.getY() - 32 && p.getVelY() > 0)
-			 || (p.getX() >= fl2.getX() && p.getX() <= fl2.getX() + 100 && p.getY() >= fl2.getY() - 32 && p.getVelY() > 0)
-			 || (p.getX() >= fl3.getX() && p.getX() <= fl3.getX() + 100 && p.getY() >= fl3.getY() - 32 && p.getVelY() > 0)
-			 || (p.getX() >= fl4.getX() && p.getX() <= fl4.getX() + 100 && p.getY() >= fl4.getY() - 32 && p.getVelY() > 0)) // hàm dừng nhân vật khi va chạm vào cột
+			if ((p.getX() >= fl1.getX() && p.getX() <= fl1.getX() + 90 && p.getY() >= fl1.getY() - 32 && p.getVelY() > 0)
+			 || (p.getX() >= fl2.getX() && p.getX() <= fl2.getX() + 90 && p.getY() >= fl2.getY() - 32 && p.getVelY() > 0)
+			 || (p.getX() >= fl3.getX() && p.getX() <= fl3.getX() + 90 && p.getY() >= fl3.getY() - 32 && p.getVelY() > 0)
+			 || (p.getX() >= fl4.getX() && p.getX() <= fl4.getX() + 90 && p.getY() >= fl4.getY() - 32 && p.getVelY() > 0)) // hàm dừng nhân vật khi va chạm vào cột
 			{
 
 				p.setVelY(0);
@@ -246,6 +268,7 @@ public class Game extends Canvas implements Runnable {
 				p.setX(p.getX() + (int) p.getVelX());
 				p.setY(p.getY() + (int) p.getVelY());
 			}
+			
 		}
 
 	}
@@ -269,37 +292,41 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		g.setColor(new Color(39, 40, 34));
-		g.fillRect(0, 0, WIDTH, HEIGHT);
-		g.setColor(Color.gray);
+		
+		g.setColor(new Color(0, 85, 149));
 		if (stage == 1) {
-			g.setFont(new Font("Dialog", Font.PLAIN, 48));
-			g.drawString("CockroachesJumper", 300, 80);
+			g.drawImage(im,0,0,null);
 			g.setColor(Color.white);
 			g.setFont(new Font("Dialog", Font.PLAIN, 24));
-			g.drawString("Start", 205, 189);
-			g.drawString("Help", 405, 189);
-			g.drawString("Quit", 605, 189);
-			g.drawRect(170, 150, 120, 64);
-			g.drawRect(370, 150, 120, 64);
-			g.drawRect(570, 150, 120, 64);
-			g.setColor(Color.gray);
+			g.setColor(new Color(0, 85, 149));
+			g.fillRect(270, 250, 120, 64);
+			g.fillRect(470, 250, 120, 64);
+			g.fillRect(670, 250, 120, 64);
+			g.setColor(Color.BLACK);
+			g.drawRect(270, 250, 120, 64);
+			g.drawRect(470, 250, 120, 64);
+			g.drawRect(670, 250, 120, 64);
+			g.setColor(Color.white);
+			g.drawString("Start", 305, 289);
+			g.drawString("Help", 505, 289);
+			g.drawString("Quit", 705, 289);
+			
 			addMouseListener(new MouseAdapter() // thêm sự kiện cho chuột
 					{
 						public void mousePressed(MouseEvent e) {
 							int mx = e.getX();
 							int my = e.getY();
-							if (mouseOver(mx, my, 170, 150, 120, 64)) // chuột click ở trong vùng nút retry
+							if (mouseOver(mx, my, 270, 250, 120, 64) && stage==1) // chuột click ở trong vùng nút retry
 							{
 								stage = 2;
 
 							}
-							if (mouseOver(mx, my, 370, 150, 120, 64)) // chuột click ở trong vùng nút retry
+							if (mouseOver(mx, my, 470, 250, 120, 64)&& stage==1) // chuột click ở trong vùng nút retry
 							{
 								stage = 4;
 
 							}
-							if (mouseOver(mx, my, 570, 150, 120, 64)) {
+							if (mouseOver(mx, my, 670, 250, 120, 64)&& stage==1) {
 								System.exit(0);
 							}
 						}
@@ -313,7 +340,7 @@ public class Game extends Canvas implements Runnable {
 				public void mousePressed(MouseEvent e) {
 					int mx = e.getX();
 					int my = e.getY();
-					if(mouseOver(mx,my,600, 400, 100, 50))
+					if(mouseOver(mx,my,550, 400, 100, 50) && stage == 3)
 					{
 						System.exit(0);
 					}
@@ -322,19 +349,23 @@ public class Game extends Canvas implements Runnable {
 		}
 
 		if (stage == 4) {
-			g.setColor(Color.white);
+			g.drawImage(im,0,0,null);
+			g.setColor(new Color(0, 85, 149));
+			g.fillRect(170 + 300, 150 + 200, 120, 64);
+		
+			g.setColor(new Color (0, 85, 149));
 			g.setFont(new Font("Dialog", Font.PLAIN, 48));
-			g.drawString("Hold Space To Jump..... Over =)))", 205, 189);
+			g.drawString("Hold Space To Jump..... Over =)))", 205, 289);
 			g.setFont(new Font("Dialog", Font.PLAIN, 24));
-			g.drawString("Back", 205 + 200, 189 + 200);
-			g.drawRect(170 + 200, 150 + 200, 120, 64);
-			g.setColor(Color.gray);
+			g.setColor(Color.white );
+			g.drawString("Back", 305 + 200, 189 + 200);
+
 			addMouseListener(new MouseAdapter() // thêm sự kiện cho chuột
 					{
 						public void mousePressed(MouseEvent e) {
 							int mx = e.getX();
 							int my = e.getY();
-							if (mouseOver(mx, my, 170 + 200, 150 + 200, 120, 64)) // chuột click ở trong vùng nút retry
+							if (mouseOver(mx, my, 170 + 300, 150 + 200, 120, 64) && stage == 4) // chuột click ở trong vùng nút retry
 							{
 								stage = 1;
 
@@ -345,8 +376,8 @@ public class Game extends Canvas implements Runnable {
 					});
 		}
 
-		if (stage == 3 || stage == 2)
-			handler.render(g);
+		if (stage == 3 || stage == 2) handler.render(g);
+			
 		g.dispose();
 		g.dispose();
 		bs.show();
@@ -356,6 +387,10 @@ public class Game extends Canvas implements Runnable {
 
 		// TODO Auto-generated method stub
 		return Score;
+	}
+	public static Texture getInstance()
+	{
+		return tex;
 	}
 
 }

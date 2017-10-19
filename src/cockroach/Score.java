@@ -23,10 +23,10 @@ public class Score extends GameObject {
 	@Override
 	public void render(Graphics g) {
 		// TODO Auto-generated method stub
-		g.setColor(Color.gray);
+		g.setColor(Color.white);
 		g.setFont(new Font("Dialog", Font.PLAIN, 42));
 		g.drawString("Score: " + Integer.toString(Score), 100, 100);
-		g.setColor(Color.gray);
+		g.setColor(Color.white);
 
 	}
 

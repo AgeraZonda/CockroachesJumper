@@ -16,6 +16,7 @@ public class KeyBoard implements KeyListener {
 	}
 
 	private double[] keyPressedTime;
+	
 	private double newTime = 0;
 
 	@Override
@@ -26,10 +27,12 @@ public class KeyBoard implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (isPress == 0) {
 			newTime = System.currentTimeMillis();
+			isPress = 1;
+			p.setType(1);
+			
 		} // newtime chứa thông tin thời gian lúc ấn cách
-
-		isPress = 1;
-
+		
+	
 	}
 
 	@Override
@@ -38,6 +41,8 @@ public class KeyBoard implements KeyListener {
 																		// nút cách
 		isPress = 0; // is press để chứa thông tin người chơi đã ấn cách hay chưa
 		time = keyPressedTime[e.getKeyCode()] - newTime; // time chứa thông tin khoảng thời gian giữa ấn và thả cách
+	
+			
 		if (time >= 25 * 40)
 			time = 25 * 40;
 		int key = e.getKeyCode();
@@ -59,6 +64,10 @@ public class KeyBoard implements KeyListener {
 
 	public boolean getIsSpace() {
 		return isSpace;
+	}
+	public int getIspress()
+	{
+		return isPress;
 	}
 
 }
