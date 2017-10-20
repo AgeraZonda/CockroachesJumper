@@ -16,7 +16,8 @@ public class LandScape extends GameObject{
 	@Override
 	public void tick() {
 		// TODO Auto-generated method stub
-		
+		x+=velX;
+		y+=velY;
 	}
 
 	@Override

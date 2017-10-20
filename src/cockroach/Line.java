@@ -30,7 +30,7 @@ public class Line extends GameObject {
 	}
 
 	public Line2D getLine() {
-		return new Line2D.Float(x, y + 8, x, y + 300);
+		return new Line2D.Float(x, y + 20, x, y + 300);
 	}
 
 }

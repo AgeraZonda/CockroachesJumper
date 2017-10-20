@@ -26,6 +26,8 @@ public class Texture {
 		ls= new SpriteSheet(landscape_sheet);
 		bs= new SpriteSheet(ball_sheet);
 		fs = new SpriteSheet(floor_sheet);
+	
+		
 		
 		getTextures();
 	}
@@ -34,7 +36,7 @@ public class Texture {
 		ball[0] = bs.grabImage(1, 1, 32, 32);
 		ball[1] = bs.grabImage(2, 1, 41, 32);
 		floor[0]=fs.grabImage(1, 1, 100, 300);
-		landscape[0]=ls.grabImage(1, 1, 2448, 810);
+		landscape[0]=ls.grabImage(1, 1, 2448+2448, 810);
 		landscape[1]=ls.grabImage(2, 1, 2448, 810);
 		
 

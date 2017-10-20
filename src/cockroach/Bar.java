@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 public class Bar extends GameObject {
 	private double Heath;
+	
 
 	public Bar(int x, int y) {
 		super(x, y);
@@ -15,7 +16,7 @@ public class Bar extends GameObject {
 	public void tick() {
 		// TODO Auto-generated method stub
 		if (Heath > 0)
-			Heath -= 0.5;
+			Heath -= 0.4;
 	}
 
 	@Override

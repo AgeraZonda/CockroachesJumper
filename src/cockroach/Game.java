@@ -33,15 +33,17 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 	private Rectangle a;
 	private Bar bar;
 	private Line ln1, ln2, ln3, ln4;
-	private int stage;								//biến phân biệt các cảnh trong game
+	public static int stage;								//biến phân biệt các cảnh trong game
 	private static Texture tex;
 	private LandScape ls;
 	private BufferedImageLoader bil;
 	BufferedImage im;
-	
-
+	public double holding;
+	MouseAdapter mb,mc;
+	MouseAdapter ma;
 	public Game() // Hàm Constructor
 	{
+		holding=0;
 		bil=new BufferedImageLoader() ;
 		im=bil.loadImage("/Start.png");
 		tex= new Texture();
@@ -85,63 +87,100 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 		currentFloor = fl1;
 		nextFloor = fl2;
 		keyboard.setPlayer(p);
-		addMouseListener(new MouseAdapter() 			// thêm sự kiện cho chuột
+		ma=new MouseAdapter() // thêm sự kiện cho chuột
 				{
-					public void mousePressed(MouseEvent e) {
-						int mx = e.getX();
-						int my = e.getY();
-						if (mouseOver(mx, my, 350, 400, 100, 50) && stage==3) 			// chuột click ở trong vùng nút retry
-						{
-							bil=new BufferedImageLoader() ;
-							im=bil.loadImage("/Start.png");
-							tex= new Texture();
-							stage = 1;
-							keyboard = new KeyBoard();
-							bar = new Bar(10, 10);
-							bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
-							handler = new Handler();
-							sc = new Score(0, 0);
-							go = new GameOver(0, 0);
-							go.sc(sc);
-							fl1 = new Floor(200, HEIGHT - 200);
-							fl2 = new Floor(200 + 400 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170)); 																
-							fl3 = new Floor(200 + 800 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
-							fl4 = new Floor(200 + 1200 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
-							p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32,0); 
-							ls= new LandScape(0,0);
-							thisFl = 1;
-							ln1 = new Line(fl1.getX(), fl1.getY());
-							ln2 = new Line(fl2.getX(), fl2.getY());
-							ln3 = new Line(fl3.getX(), fl3.getY());
-							ln4 = new Line(fl4.getX(), fl4.getY());
-							ln1.setFLoor(fl1);
-							ln2.setFLoor(fl2);
-							ln3.setFLoor(fl3);
-							ln4.setFLoor(fl4);
-							handler.addObject(ls);
-							handler.addObject(fl1);
-							handler.addObject(fl2);
-							handler.addObject(fl3);
-							handler.addObject(fl4);
-							handler.addObject(sc);
-							handler.addObject(ln1);
-							handler.addObject(ln2);
-							handler.addObject(ln3);
-							handler.addObject(ln4);
-							handler.addObject(p);
-							bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
-							handler.addObject(bar);
-							currentFloor = fl1;
-							nextFloor = fl2;
-							keyboard.setPlayer(p);
-							stage=2;
-
-						}
+				public void mousePressed(MouseEvent e) {
+				int mx = e.getX();
+				int my = e.getY();
+				if(mouseOver(mx,my,550, 400, 100, 50) && stage == 3)
+				{
+					System.exit(0);
+				}
+				if (mouseOver(mx, my, 350, 400, 100, 50) && stage==3) 			// chuột click ở trong vùng nút retry
+				{
+					holding=0;
+					bil=new BufferedImageLoader() ;
+					im=bil.loadImage("/Start.png");
+					tex= new Texture();
+					stage = 1;
+					keyboard = new KeyBoard();
 					
-					}
-				});
-
+					bar = new Bar(10, 10);
+					bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
+					handler = new Handler();
+					sc = new Score(0, 0);
+					go = new GameOver(0, 0);
+					go.sc(sc);
+					fl1 = new Floor(200, HEIGHT - 200);
+					fl2 = new Floor(200 + 400 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170)); // Khai báo các cột để nhảy																		
+					fl3 = new Floor(200 + 800 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
+					fl4 = new Floor(200 + 1200 - 85 + r.nextInt(170), HEIGHT - 200 - 85 + r.nextInt(170));
+					p = new Player((int) fl1.getX() + 32, (int) fl1.getY() - 32,0); // Khai báo nhân vật của mình
+					ls= new LandScape(0,0);
+					thisFl = 1;
+					ln1 = new Line(fl1.getX(), fl1.getY());
+					ln2 = new Line(fl2.getX(), fl2.getY());
+					ln3 = new Line(fl3.getX(), fl3.getY());
+					ln4 = new Line(fl4.getX(), fl4.getY());
+					ln1.setFLoor(fl1);
+					ln2.setFLoor(fl2);
+					ln3.setFLoor(fl3);
+					ln4.setFLoor(fl4);
+					handler.addObject(ls);
+					handler.addObject(fl1); // add các cột vào Handler
+					handler.addObject(fl2);
+					handler.addObject(fl3);
+					handler.addObject(fl4);
+					handler.addObject(sc);
+					handler.addObject(ln1);
+					handler.addObject(ln2);
+					handler.addObject(ln3);
+					handler.addObject(ln4);
+					handler.addObject(p);
+					bottom = new Line2D.Float(0, HEIGHT, WIDTH, HEIGHT);
+					handler.addObject(bar);
+					currentFloor = fl1;
+					nextFloor = fl2;
+					keyboard.setPlayer(p);
+					stage=2;
+				
+				}
+				}};
+		mb=new MouseAdapter() // thêm sự kiện cho chuột
+		{
+			public void mousePressed(MouseEvent e) {
+				int mx = e.getX();
+				int my = e.getY();
+				if (mouseOver(mx, my, 270, 250, 120, 64) && stage==1) // chuột click ở trong vùng nút retry
+				{
+					stage = 2;
+				}
+				if (mouseOver(mx, my, 470, 250, 120, 64)&& stage==1) // chuột click ở trong vùng nút retry
+				{
+					stage = 4;
+				}
+				if (mouseOver(mx, my, 670, 250, 120, 64)&& stage==1) {
+					System.exit(0);
+				}
+			}
+			
+		};
+		mc=new MouseAdapter() // thêm sự kiện cho chuột
+				{
+			public void mousePressed(MouseEvent e) {
+				int mx = e.getX();
+				int my = e.getY();
+				if (mouseOver(mx, my, 170 + 300, 150 + 200, 120, 64) && stage == 4) // chuột click ở trong vùng nút retry
+				{
+					stage = 1;
+				}
+			}
+		};
 	}
+
+			
+			
+			
 
 	public synchronized void stop() 		// Hàm dừng MutiThreading
 	{
@@ -176,7 +215,7 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 		double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
-		long timer = System.currentTimeMillis();
+
 	
 		while(running) {
 			long now = System.nanoTime();
@@ -186,7 +225,6 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 				tick();
 				
 				delta--;
-				
 			}
 			render();
 		}
@@ -194,10 +232,13 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 
 	private void tick() // Hàm xử Lý sau mỗi Khung Hình
 	{
+	
 	if(keyboard.getIspress()==0)		//khi quả bóng bay thì trở về lúc ban đầu 
 	{
 		p.setType(0);
+		holding=0;
 	}
+	
 		if (stage == 2) {
 			this.addKeyListener(keyboard);
 			if (keyboard.getIsSpace())
@@ -208,11 +249,14 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 				fl2.setVelX(7.6925);
 				fl3.setVelX(7.6925);
 				fl4.setVelX(7.6925);
+				ls.setVelX(-2);
+				
 			} else if (p.getVelY() == 0) {
 				fl1.setVelX(0);
 				fl2.setVelX(0);
 				fl3.setVelX(0);
 				fl4.setVelX(0);
+				ls.setVelX(0);
 			}
 			handler.tick(); 			// xử lý các vật thể trên mỗi khung hình (bao gồm nhân vật và các cột )
 			if (bottom.intersects(a) || ln1.getLine().intersects(a) || ln2.getLine().intersects(a)
@@ -246,12 +290,14 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 					currentFloor = fl4;
 					nextFloor = fl1;
 				}
+				
 			}
+			Line2D topln = new Line2D.Float(currentFloor.getX()-20,currentFloor.getY()-5,currentFloor.getX()+90,currentFloor.getY()-5);
 
-			if ((p.getX() >= fl1.getX() && p.getX() <= fl1.getX() + 90 && p.getY() >= fl1.getY() - 32 && p.getVelY() > 0)
-			 || (p.getX() >= fl2.getX() && p.getX() <= fl2.getX() + 90 && p.getY() >= fl2.getY() - 32 && p.getVelY() > 0)
-			 || (p.getX() >= fl3.getX() && p.getX() <= fl3.getX() + 90 && p.getY() >= fl3.getY() - 32 && p.getVelY() > 0)
-			 || (p.getX() >= fl4.getX() && p.getX() <= fl4.getX() + 90 && p.getY() >= fl4.getY() - 32 && p.getVelY() > 0)) // hàm dừng nhân vật khi va chạm vào cột
+			if ((p.getX() >= fl1.getX() && p.getX() <= fl1.getX() + 100 && topln.intersects(a) && p.getVelY() > 0)
+			 || (p.getX() >= fl2.getX() && p.getX() <= fl2.getX() + 100 && topln.intersects(a) && p.getVelY() > 0)
+			 || (p.getX() >= fl3.getX() && p.getX() <= fl3.getX() + 100 && topln.intersects(a) && p.getVelY() > 0)
+			 || (p.getX() >= fl4.getX() && p.getX() <= fl4.getX() + 100 && topln.intersects(a) && p.getVelY() > 0)) // hàm dừng nhân vật khi va chạm vào cột
 			{
 
 				p.setVelY(0);
@@ -259,18 +305,14 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 					bar.setHeath(100);
 					keyboard.setIsSpace(false);
 				}
-
 			}
-
-			if (p.getY() > currentFloor.getY() - 35 && keyboard.getIsSpace() == false) {
-				p.setY(currentFloor.getY() - 32);
+			if (p.getY() > currentFloor.getY() - 25 && keyboard.getIsSpace() == false) {
+				p.setY(currentFloor.getY() - 25);
 			} else {
 				p.setX(p.getX() + (int) p.getVelX());
 				p.setY(p.getY() + (int) p.getVelY());
 			}
-			
 		}
-
 	}
 
 	private boolean mouseOver(int mx, int my, int x, int y, int width, int height) // Hàm khoanh vùng click chuột
@@ -283,7 +325,7 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 		} else
 			return false;
 	}
-
+	
 	private void render() // Hàm render hình ảnh game
 	{
 		BufferStrategy bs = this.getBufferStrategy(); // tạo BufferStrategy để render game
@@ -292,7 +334,6 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		
 		g.setColor(new Color(0, 85, 149));
 		if (stage == 1) {
 			g.drawImage(im,0,0,null);
@@ -311,86 +352,52 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 			g.drawString("Help", 505, 289);
 			g.drawString("Quit", 705, 289);
 			
-			addMouseListener(new MouseAdapter() // thêm sự kiện cho chuột
-					{
-						public void mousePressed(MouseEvent e) {
-							int mx = e.getX();
-							int my = e.getY();
-							if (mouseOver(mx, my, 270, 250, 120, 64) && stage==1) // chuột click ở trong vùng nút retry
-							{
-								stage = 2;
-
-							}
-							if (mouseOver(mx, my, 470, 250, 120, 64)&& stage==1) // chuột click ở trong vùng nút retry
-							{
-								stage = 4;
-
-							}
-							if (mouseOver(mx, my, 670, 250, 120, 64)&& stage==1) {
-								System.exit(0);
-							}
-						}
-					});
-		
-			
+			addMouseListener(mb);
+			this.removeMouseListener(mc);
 		}
 		if (stage == 3) {
-			addMouseListener(new MouseAdapter() // thêm sự kiện cho chuột
-			{
-				public void mousePressed(MouseEvent e) {
-					int mx = e.getX();
-					int my = e.getY();
-					if(mouseOver(mx,my,550, 400, 100, 50) && stage == 3)
-					{
-						System.exit(0);
-					}
-				}
-			});
-		}
+			
+			this.addMouseListener(ma);
 
+			this.removeMouseListener(mb);
+			this.removeMouseListener(mc);
+			
+		}
 		if (stage == 4) {
 			g.drawImage(im,0,0,null);
 			g.setColor(new Color(0, 85, 149));
 			g.fillRect(170 + 300, 150 + 200, 120, 64);
-		
 			g.setColor(new Color (0, 85, 149));
 			g.setFont(new Font("Dialog", Font.PLAIN, 48));
 			g.drawString("Hold Space To Jump..... Over =)))", 205, 289);
 			g.setFont(new Font("Dialog", Font.PLAIN, 24));
 			g.setColor(Color.white );
 			g.drawString("Back", 305 + 200, 189 + 200);
-
-			addMouseListener(new MouseAdapter() // thêm sự kiện cho chuột
-					{
-						public void mousePressed(MouseEvent e) {
-							int mx = e.getX();
-							int my = e.getY();
-							if (mouseOver(mx, my, 170 + 300, 150 + 200, 120, 64) && stage == 4) // chuột click ở trong vùng nút retry
-							{
-								stage = 1;
-
-							}
-						
-
-						}
-					});
+			addMouseListener(mc);
+			this.removeMouseListener(mb);
 		}
-
 		if (stage == 3 || stage == 2) handler.render(g);
-			
+		if(stage==2)this.removeMouseListener(ma);;
+		if(stage ==2 && keyboard.getIspress()==1)
+		{
+			holding++;
+			if(holding>=5500)holding=5500;
+			g.setColor(new Color (0, 85, 149));
+			g.fillRect(10,500,10,-(int)holding/20);
+		}
 		g.dispose();
 		g.dispose();
 		bs.show();
 	}
 
 	public int getScore() {
-
-		// TODO Auto-generated method stub
 		return Score;
 	}
 	public static Texture getInstance()
 	{
 		return tex;
 	}
+
+
 
 }

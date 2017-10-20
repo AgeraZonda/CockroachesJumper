@@ -26,13 +26,13 @@ public class KeyBoard implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (isPress == 0) {
+			time=0;
 			newTime = System.currentTimeMillis();
 			isPress = 1;
-			p.setType(1);
+			if(isSpace==false)p.setType(1);
+			
 			
 		} // newtime chứa thông tin thời gian lúc ấn cách
-		
-	
 	}
 
 	@Override
@@ -42,12 +42,11 @@ public class KeyBoard implements KeyListener {
 		isPress = 0; // is press để chứa thông tin người chơi đã ấn cách hay chưa
 		time = keyPressedTime[e.getKeyCode()] - newTime; // time chứa thông tin khoảng thời gian giữa ấn và thả cách
 	
-			
-		if (time >= 25 * 40)
-			time = 25 * 40;
+		if (time >= 27 * 40)time = 27 * 40;
+	
 		int key = e.getKeyCode();
 
-		if (key == KeyEvent.VK_SPACE) { // khi key == code của nút space thì gán tốc độ Y cho nhân vật
+		if (key == KeyEvent.VK_SPACE && Game.stage==2 && isSpace ==false ) { // khi key == code của nút space thì gán tốc độ Y cho nhân vật
 			p.setVelY(-(time / 30));
 			isSpace = true;
 		}
@@ -57,17 +56,19 @@ public class KeyBoard implements KeyListener {
 	public void setPlayer(Player p) {
 		this.p = p;
 	}
-
 	public void setIsSpace(boolean isSpace) {
 		this.isSpace = isSpace;
 	}
-
 	public boolean getIsSpace() {
 		return isSpace;
 	}
 	public int getIspress()
 	{
 		return isPress;
+	}
+	public double getTime()
+	{
+		return time;
 	}
 
 }
