@@ -1,67 +1,52 @@
 package cockroach;
-								// class cha của các vật thể trong game
+// class cha của các vật thể trong game
 
 import java.awt.Graphics;
 
 public abstract class GameObject {
-	protected double x,y;
-	protected ID id;
-	protected double velX,velY;
-	protected double radian;
-	String a;
+	protected int x, y;
+	protected double velX, velY;
 
-	public GameObject(double x, double y,ID id, String a)
-	{
-		this.x=x;
-		this.y=y;
-		this.id=id;
-		this.a=a;
-		
+	public GameObject(int x, int y) {
+		this.x = x;
+		this.y = y;
+
 	}
+
 	public abstract void tick();
+
 	public abstract void render(Graphics g);
-	public void setX(double x) {
-		this.x=x;
+
+	public void setX(int x) {
+		this.x = x;
 	}
-	public double getRadian()
-	{
-		return radian;
-	}
-	
-	public double getX()
-	{
+
+	public int getX() {
 		return x;
 	}
-	public void setY(double y) {
-		this.y=y;
+
+	public void setY(int y) {
+		this.y = y;
 	}
-	public double getY()
-	{
+
+	public int getY() {
 		return y;
 	}
-	public void setId(ID id)
-	{
-		this.id=id;
+
+	public void setVelX(double velX) {
+		this.velX = velX;
 	}
-	public ID getId()
-	{
-		return id;
-	}
-	public void setVelX(double velX)
-	{
-		this.velX=velX;
-	}
-	public double getVelX()
-	{
+
+	public double getVelX() {
 		return velX;
 	}
-	public void setVelY(double velY)
-	{
-		this.velY=velY;
+
+	public void setVelY(double velY) {
+		this.velY = velY;
 	}
-	public double getVelY()
-	{
+
+	public double getVelY() {
 		return velY;
 	}
-	
+
 }
