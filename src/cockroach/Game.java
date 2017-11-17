@@ -86,11 +86,26 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 		currentFloor = fl1;
 		nextFloor = fl2;
 		keyboard.setPlayer(p);
-		ma=new MouseAdapter() 																	// thêm sự kiện cho nút retry 
+		this.addMouseListener(new MouseAdapter() 																	// thêm sự kiện cho nút retry 
 				{
 				public void mousePressed(MouseEvent e) {
 				int mx = e.getX();
 				int my = e.getY();
+				if (mouseOver(mx, my, 170 + 300, 150 + 200, 120, 64) && stage == 4) // chuột click ở trong vùng nút retry
+				{
+					stage = 1;
+				}
+				if (mouseOver(mx, my, 270, 250, 120, 64) && stage==1) // chuột click ở trong vùng nút retry
+				{
+					stage = 2;
+				}
+				if (mouseOver(mx, my, 470, 250, 120, 64)&& stage==1) // chuột click ở trong vùng nút retry
+				{
+					stage = 4;
+				}
+				if (mouseOver(mx, my, 670, 250, 120, 64)&& stage==1) {
+					System.exit(0);
+				}
 				if(mouseOver(mx,my,550, 400, 100, 50) && stage == 3)
 				{
 					System.exit(0);
@@ -144,37 +159,7 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 					stage=2;
 				
 				}
-				}};
-		mb=new MouseAdapter() // thêm sự kiện cho chuột
-		{
-			public void mousePressed(MouseEvent e) {
-				int mx = e.getX();
-				int my = e.getY();
-				if (mouseOver(mx, my, 270, 250, 120, 64) && stage==1) // chuột click ở trong vùng nút retry
-				{
-					stage = 2;
-				}
-				if (mouseOver(mx, my, 470, 250, 120, 64)&& stage==1) // chuột click ở trong vùng nút retry
-				{
-					stage = 4;
-				}
-				if (mouseOver(mx, my, 670, 250, 120, 64)&& stage==1) {
-					System.exit(0);
-				}
-			}
-			
-		};
-		mc=new MouseAdapter() // thêm sự kiện cho chuột
-				{
-			public void mousePressed(MouseEvent e) {
-				int mx = e.getX();
-				int my = e.getY();
-				if (mouseOver(mx, my, 170 + 300, 150 + 200, 120, 64) && stage == 4) // chuột click ở trong vùng nút retry
-				{
-					stage = 1;
-				}
-			}
-		};
+				}});
 	}
 
 			
@@ -351,17 +336,9 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 			g.drawString("Help", 505, 289);
 			g.drawString("Quit", 705, 289);
 			
-			addMouseListener(mb);
-			this.removeMouseListener(mc);
+		
 		}
-		if (stage == 3) {
-			
-			this.addMouseListener(ma);
-
-			this.removeMouseListener(mb);
-			this.removeMouseListener(mc);
-			
-		}
+		
 		if (stage == 4) {
 			g.drawImage(im,0,0,null);
 			g.setColor(new Color(0, 85, 149));
@@ -372,11 +349,10 @@ public class Game extends Canvas implements Runnable {						// Khai báo biến
 			g.setFont(new Font("Dialog", Font.PLAIN, 24));
 			g.setColor(Color.white );
 			g.drawString("Back", 305 + 200, 189 + 200);
-			addMouseListener(mc);
-			this.removeMouseListener(mb);
+			
 		}
 		if (stage == 3 || stage == 2) handler.render(g);
-		if(stage==2)this.removeMouseListener(ma);;
+		
 		if(stage ==2 && keyboard.getIspress()==1)
 		{
 			holding++;
